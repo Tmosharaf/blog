@@ -1,4 +1,17 @@
-@extends('layouts.dashboardApp') @section('content')
+@extends('layouts.dashboardApp') 
+
+
+@section('collapseShow')
+show
+@endsection
+@section('active_post')
+active
+@endsection
+
+@section('content')
+
+
+
 
 <div class="content-wrapper">
     <div class="content">
@@ -19,6 +32,20 @@
         </div>
 
         <div class="row">
+
+            @if (session()->has('msg'))
+                
+                <div class="col-lg-12">
+                    <div class="alert alert-success" role="alert">
+                        @if (session()->has('msg'))
+                            {{ session('msg')}}
+                         @endif
+                    </div>
+                   
+                </div>
+
+            @endif
+
             <div class="col-12">
                 <!-- Recent Order Table -->
                 <div class="card card-table-border-none" id="recent-orders">
@@ -39,42 +66,40 @@
                         >
                             <thead>
                                 <tr>
-                                    <th>Order ID</th>
-                                    <th>Product Name</th>
-                                    <th class="d-none d-md-table-cell">
-                                        Units
-                                    </th>
-                                    <th class="d-none d-md-table-cell">
-                                        Order Date
-                                    </th>
-                                    <th class="d-none d-md-table-cell">
-                                        Order Cost
-                                    </th>
-                                    <th>Status</th>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th class="">Description</th>
+                                    <th>Created At</th>
+                                    <th>Category</th>
+                                    <th>Created By</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
+                             
+                                @forelse ($posts as $post )
+                                  
+                                {{-- {{ dd($loop) }} --}}
                                 <tr>
-                                    <td>24541</td>
+                                    <td>{{ $loop->index+1 }}</td>
                                     <td>
-                                        <a class="text-dark" href="">
-                                            Coach Swagger</a
+                                        <a class="text-dark" href="post/{{ $post->slug }}">
+                                            {{ Str::limit($post->title, 30) }}</a
                                         >
                                     </td>
-                                    <td class="d-none d-md-table-cell">
-                                        1 Unit
-                                    </td>
-                                    <td class="d-none d-md-table-cell">
-                                        Oct 20, 2018
-                                    </td>
-                                    <td class="d-none d-md-table-cell">$230</td>
                                     <td>
-                                        <span class="badge badge-success"
-                                            >Completed</span
-                                        >
+                                        <p>{{ Str::limit($post->description, 70) }}</p>
                                     </td>
-                                    <td class="text-right">
+                                    <td>
+                                        {{ $post->created_at->shortRelativeDiffForHumans() }}
+                                    </td>
+                                    <td>
+                                        {{ $post->category->name }}
+                                    </td>
+                                    <td>
+                                        {{ $post->user->name }}
+                                    </td>
+                                    <td class="text-center">
                                         <div
                                             class="
                                                 dropdown
@@ -104,15 +129,27 @@
                                                 aria-labelledby="dropdown-recent-order1"
                                             >
                                                 <li class="dropdown-item">
-                                                    <a href="#">Edit</a>
+                                                    <a href="post/{{ $post->id }}/edit">Edit</a>
                                                 </li>
                                                 <li class="dropdown-item">
-                                                    <a href="#">Remove</a>
+                                                    <form action="{{ route('post.destroy', $post) }}" method="POST">
+                                                        @csrf
+                                                        @method("DELETE")
+                                                        <button type="submit">Remove</button>
+                                                        
+                                                    </form>
                                                 </li>
                                             </ul>
                                         </div>
                                     </td>
-                                </tr>
+                                </tr>  
+                                @empty
+                                <tr class="text-center">
+                                  <td><p>no data</p></td>
+                                </tr>    
+                                @endforelse
+                             
+                                
                             </tbody>
                         </table>
                     </div>

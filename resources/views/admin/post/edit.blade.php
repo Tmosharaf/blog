@@ -1,14 +1,13 @@
 @extends('layouts.dashboardApp') 
 
 
+
 @section('collapseShow')
 show
 @endsection
 @section('active_post')
 active
 @endsection
-
-
 
 @section('content')
 
@@ -17,7 +16,7 @@ active
 <div class="content-wrapper">
     <div class="content">
         <div class="row">
-            @if (session()->has('msg'))
+            {{-- @if (session()->has('msg'))
                 
                 <div class="col-lg-12">
                     <div class="alert alert-success" role="alert">
@@ -28,20 +27,21 @@ active
                    
                 </div>
 
-            @endif
+            @endif --}}
             
 
 
             <div class="col-lg-12">
                 <div class="card card-default">
                     <div class="card-header card-header-border-bottom">
-                        <h2>Create your post</h2>
+                        <h2>Edit your post</h2>
                         
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('post.store') }}"  method="POST"  enctype="multipart/form-data">
+                        <form method="POST" action="{{ url('post/'.$post->id) }}" enctype="multipart/form-data">
                             @csrf
-                            @method("POST")
+                            @method('PUT')
+                            
                             
                             <div class="form-group">
                                 <label for="categories">select category</label>
@@ -51,7 +51,7 @@ active
                                     name="category_id">
                                     <option>--Please Select--</option>
                                     @forelse ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        <option {{ ($post->category_id == $category->id) ? 'selected' : '' }} value="{{ $category->id }}">{{ $category->name }}</option>
                                     @empty
                                         <option value="">Nai</option>
                                     @endforelse
@@ -70,6 +70,7 @@ active
                                     name="title"
                                     class="form-control"
                                     id="title"
+                                    value="{{ $post->title }}"
                                 />
                                 @if($errors->has('title'))
                                     <p style="color: red">
@@ -86,7 +87,7 @@ active
                                     class="form-control"
                                     id="description"
                                     rows="3"
-                                ></textarea>
+                                >{{ $post->description }}</textarea>
                                 @if($errors->has('description'))
                                 <p style="color: red">
                                     {{$errors->first('description')}}
@@ -114,7 +115,7 @@ active
                                     type="submit"
                                     class="btn btn-primary btn-default"
                                 >
-                                    Submit
+                                    Update
                                 </button>
                                 <a href="#" class="btn btn-secondary btn-default"> Cancel</a>
                                 
