@@ -16,9 +16,9 @@ active
 <div class="content-wrapper">
     <div class="content">
         <div class="breadcrumb-wrapper">
-            <h1>Posts</h1>
+            <h1>Archived Posts</h1>
 
-            <nav aria-label="breadcrumb">
+            {{-- <nav aria-label="breadcrumb">
                 <ol class="breadcrumb p-0">
                     <li class="breadcrumb-item">
                         <a href="index.html">
@@ -28,7 +28,7 @@ active
                     <li class="breadcrumb-item">Posts</li>
                     <li class="breadcrumb-item" aria-current="page">All</li>
                 </ol>
-            </nav>
+            </nav> --}}
         </div>
 
         <div class="row">
@@ -129,15 +129,10 @@ active
                                                 aria-labelledby="dropdown-recent-order1"
                                             >
                                                 <li class="dropdown-item">
-                                                    <a href="post/{{ $post->id }}/edit">Edit</a>
+                                                    <a href="{{ route('post.restore', $post->id) }}" class="btn btn-success">Restore</a>
                                                 </li>
                                                 <li class="dropdown-item">
-                                                    <form action="{{ route('post.destroy', $post) }}" method="POST">
-                                                        @csrf
-                                                        @method("DELETE")
-                                                        <button type="submit">Archive</button>
-                                                        
-                                                    </form>
+                                                    <a href="{{ route('post.forceDelete', $post->id) }}" class="btn btn-danger ">Delete</a>
                                                 </li>
                                             </ul>
                                         </div>

@@ -169,4 +169,39 @@ class PostController extends Controller
         Storage::disk('public')->delete('images/admin/'.$post->thumbnail);
         return back()->with('msg', "deleted");
     }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function archived(Post $post)
+    {
+        return view('admin.post.archived')
+        ->with('posts', $post->onlyTrashed()->get());
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function restore(Post $post, $id)
+    {
+        // dd($id);
+        Post::onlyTrashed()->findOrFail($id)->restore();
+        return back()->with('msg', 'restored');
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function forceDelete(Post $post, $id)
+    {
+        // dd($id);
+        Post::onlyTrashed()->findOrFail($id)->forceDelete();
+        return back()->with('msg', 'Deleted');
+    }
 }

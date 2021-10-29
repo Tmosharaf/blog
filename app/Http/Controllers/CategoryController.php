@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Rules\AlphaSpaces;
+
+use function Ramsey\Uuid\v1;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -13,7 +19,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+       
+
+
+        return view('admin.category.index')->with('categories', Category::all());
+
     }
 
     /**
@@ -34,7 +44,17 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd();
+        $request->validate([
+            'name' => ['required', 'string', new AlphaSpaces],
+        ]);
+
+        Category::create([
+            'name'  =>  $request->input('name'),
+            'user_id'  =>  Auth::id(),
+        ]);
+
+        return back()->with('msg', "created");
     }
 
     /**
@@ -54,9 +74,13 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        //
+
+        // dd($category);
+        return view('admin.category.edit', [
+            'category'  =>  $category
+        ]);
     }
 
     /**
@@ -68,7 +92,14 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // dd();
+        $request->validate([
+            'name' => ['required', 'string', new AlphaSpaces],
+        ]);
+
+        Category::find($id)->update($request->only('name'));
+
+        return redirect(route('category.index'))->with('updated_msg', "Updated");
     }
 
     /**
@@ -79,6 +110,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Category::find($id)->delete();
+        return redirect(route('category.index'))->with('delete_msg', "Deleted");
     }
 }

@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,12 @@ Route::middleware(['auth'])->group(function () {
     })->name('admin');
 
     Route::resource('post', PostController::class);
+
+    Route::get('post/all/archived', [PostController::class, 'archived'])->name('post.archived');
+    Route::get('post/all/archived/restore/{id}', [PostController::class, 'restore'])->name('post.restore');
+    Route::get('post/all/archived/forceDelete/{id}', [PostController::class, 'forceDelete'])->name('post.forceDelete');
+
+    Route::resource('category', CategoryController::class);
 
 });
 

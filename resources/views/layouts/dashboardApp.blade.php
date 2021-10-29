@@ -123,7 +123,7 @@
                           </li>
                         
                           <li >
-                            <a class="sidenav-item-link" href="user-profile.html">
+                            <a class="sidenav-item-link" href="{{ route('post.archived') }}">
                               <span class="nav-text">Archived Posts</span>
                               
                             </a>
@@ -136,16 +136,15 @@
                     </div>
                   </ul>
                 </li>
-              
 
-              
-                <li  class="has-sub" >
-                  <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#pages"
-                    aria-expanded="false" aria-controls="pages">
+
+                <li  class="has-sub @yield('active_category')" >
+                  <a class="sidenav-item-link" href="{{ route('category.index') }}" >
                     <i class="mdi mdi-image-filter-none"></i>
-                    <span class="nav-text">Reserve</span> <b class="caret"></b>
+                    <span class="nav-text">Categories</span>
                   </a>
                 </li>
+              
               
 
                 <li  class="has-sub" >
